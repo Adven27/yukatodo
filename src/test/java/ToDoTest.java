@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ToDoTest {
 
-    private static final String FILENAME = "/Users/admin/Documents/yukatodo/src/main/resources/test";
+    private static final String FILENAME = "/Users/admin/Documents/yukatodo/src/main/resources/test.cvs";
     BufferedReader br = null;
     ToDo toDoApp = new ToDo();
     List<Task> tasks;
@@ -86,7 +86,11 @@ public class ToDoTest {
         toDoApp.add("task");
         File file1 = new File(FILENAME);
         File file2 = toDoApp.savetoFile();
-        assertEquals(true, FileUtils.contentEquals(file1, file2));
+                assertEquals(
+                FileUtils.readLines(file2,"UTF-8"),
+                FileUtils.readLines(file1,"UTF-8")
+        );
+        //assertEquals(true, FileUtils.contentEquals(file1, file2));
 
 
     }
