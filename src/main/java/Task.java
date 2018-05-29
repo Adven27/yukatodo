@@ -4,9 +4,8 @@ public class Task {
 
 
     private String description;
-
-
     private boolean state;
+
 
     public Task(String description) {
         this.description = description;
@@ -16,8 +15,17 @@ public class Task {
     public String getDescription() {
         return description;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public boolean getState() {
         return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
     }
 
     @Override
@@ -33,5 +41,11 @@ public class Task {
     public int hashCode() {
 
         return Objects.hash(description, state);
+    }
+
+    @Override
+    public String toString() {
+        return  description +
+                ", " + state;
     }
 }
