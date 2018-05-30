@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Task {
+public class Task implements Serializable{
 
 
     private String description;
@@ -10,6 +11,11 @@ public class Task {
     public Task(String description) {
         this.description = description;
         this.state = false;
+    }
+
+    public Task(String description, boolean state) {
+        this.description = description;
+        this.state = state;
     }
 
     public String getDescription() {

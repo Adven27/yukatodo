@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ToDoTest {
 
-    private static final String FILENAME = "/Users/admin/Documents/yukatodo/src/main/resources/test.cvs";
+    private static final String FILENAME = "/Users/admin/Documents/yukatodo/src/main/resources/test.csv";
     BufferedReader br = null;
     ToDo toDoApp = new ToDo();
     List<Task> tasks;
@@ -84,15 +84,26 @@ public class ToDoTest {
     @Test
     public void canStoreInFile() throws IOException {
         toDoApp.add("task");
+        toDoApp.add("task2");
+        toDoApp.add("task3");
         File file1 = new File(FILENAME);
-        File file2 = toDoApp.savetoFile();
-                assertEquals(
-                FileUtils.readLines(file2,"UTF-8"),
-                FileUtils.readLines(file1,"UTF-8")
+        File file2 = toDoApp.savetoFile("/Users/admin/Documents/yukatodo/src/main/resources/myfile.csv");
+        assertEquals(
+                FileUtils.readLines(file2, "UTF-8"),
+                FileUtils.readLines(file1, "UTF-8")
         );
-        //assertEquals(true, FileUtils.contentEquals(file1, file2));
-
-
     }
+
+    @Test
+    public void getLoadAllTasks() {
+        toDoApp.add("task");
+        toDoApp.add("task2");
+        toDoApp.add("task3");
+        tasks = toDoApp.getAllTasks();
+        File file2 = toDoApp.savetoFile("/Users/admin/Documents/yukatodo/src/main/resources/myfile.csv");
+        List<Task> test = toDoApp.readFromFile(file2);
+        assertEquals(true, tasks.equals(test) && tasks.containsAll(test));
+    }
+
 
 }
