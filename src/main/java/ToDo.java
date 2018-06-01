@@ -1,38 +1,31 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ToDo {
 
-    List<Task> tasks = new ArrayList<Task>();
+
     private static final String COMMA_DELIMITER = ", ";
     private static final String NEW_LINE_SEPARATOR = "\n";
     File file;
-
-
-    public ToDo() throws IOException {
-    }
-
+    TaskRepository taskRepository = new InMemoryTaskRepository();
 
     public void add(String s) {
-        tasks.add(new Task(s));
+        taskRepository.add(new Task(s));
     }
 
     public List<Task> getAllTasks() {
-        return tasks;
+        return taskRepository.findAll();
     }
 
     public void delete(String s) {
-        tasks.remove(new Task(s));
+        taskRepository.delete(new Task(s));
     }
 
     public Task getTaskByName(String description) {
-        for (Task t : tasks) {
-            if (t.getDescription().equals(description)) {
-                return t;
-            }
-        }
-        return null;
+        return taskRepository.find(description);
+
     }
 
     public File savetoFile(String fileName) {
@@ -40,7 +33,7 @@ public class ToDo {
         file = new File(fileName);
         try (FileWriter fr = new FileWriter(file)) {
 
-            for (Task t : tasks) {
+            for (Task t : taskRepository.findAll()) {
                 fr.append(t.getDescription());
                 fr.append(COMMA_DELIMITER);
                 fr.append(String.valueOf(t.getState()));
@@ -52,12 +45,6 @@ public class ToDo {
         }
         return file;
 
-
-        /*final CSVPrinter printer = CSVFormat.DEFAULT.print(file, Charset.defaultCharset());
-        printer.printRecords(tasks);
-        printer.flush();
-        printer.close();
-        return file;*/
     }
 
 
@@ -75,26 +62,19 @@ public class ToDo {
     }
 
     public List<Task> showCompletedTask() {
-        List<Task> test = new ArrayList<>();
-        for (Task t : tasks) {
-            if (t.getState())
-                test.add(t);
-        }
-        return test;
+        return taskRepository.findAll().stream()
+                .filter(Task::getState)
+                .collect(Collectors.toList());
     }
 
     public List<Task> showIncompleteTasks() {
-        List<Task> test = new ArrayList<>();
-        for (Task t : tasks) {
-            if (!t.getState())
-                test.add(t);
-        }
-        return test;
+        return taskRepository.findAll().stream()
+                .filter(task -> !task.getState())
+                .collect(Collectors.toList());
     }
 
     public void deleteAllTasks() {
-        tasks.clear();
-
+        taskRepository.deleteAll();
     }
 }
 

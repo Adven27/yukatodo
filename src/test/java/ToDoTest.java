@@ -1,7 +1,6 @@
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,13 +11,9 @@ import static org.junit.Assert.assertEquals;
 
 public class ToDoTest {
 
-    private static final String FILENAME = "/Users/admin/Documents/yukatodo/src/main/resources/test.csv";
-    BufferedReader br = null;
+    private static final String FILENAME = "test.csv";
     ToDo toDoApp = new ToDo();
     List<Task> tasks;
-
-    public ToDoTest() throws IOException {
-    }
 
 
     @Test
@@ -32,7 +27,7 @@ public class ToDoTest {
 
     @Test
     public void canAddSeveralTasks() {
-       addTasks();
+        addTasks();
         tasks = toDoApp.getAllTasks();
         assertEquals(3, tasks.size());
         assertEquals("task", tasks.get(0).getDescription());
@@ -83,11 +78,9 @@ public class ToDoTest {
     @Test
     public void canStoreInFile() throws IOException {
         addTasks();
-        File file1 = new File(FILENAME);
-        File file2 = toDoApp.savetoFile("/Users/admin/Documents/yukatodo/src/main/resources/myfile.csv");
         assertEquals(
-                FileUtils.readLines(file2, "UTF-8"),
-                FileUtils.readLines(file1, "UTF-8")
+                FileUtils.readLines(toDoApp.savetoFile("save.csv"), "UTF-8"),
+                FileUtils.readLines(getResourse(FILENAME), "UTF-8")
         );
     }
 
@@ -95,9 +88,9 @@ public class ToDoTest {
     public void getLoadAllTasks() {
         addTasks();
         tasks = toDoApp.getAllTasks();
-        File file2 = toDoApp.savetoFile("/Users/admin/Documents/yukatodo/src/main/resources/myfile.csv");
+        File file2 = toDoApp.savetoFile("save.csv");
         List<Task> test = toDoApp.readFromFile(file2);
-        assertEquals(true, tasks.equals(test) && tasks.containsAll(test));
+        assertEquals(test, tasks);
     }
 
 
@@ -123,8 +116,7 @@ public class ToDoTest {
         List<Task> expected = new ArrayList<>();
         expected.add(toDoApp.getTaskByName("task2"));
         expected.add(toDoApp.getTaskByName("task3"));
-        List<Task> actual = toDoApp.showIncompleteTasks();
-        assertEquals(expected, actual);
+        assertEquals(expected, toDoApp.showIncompleteTasks());
 
     }
 
@@ -134,6 +126,10 @@ public class ToDoTest {
         toDoApp.deleteAllTasks();
         assertEquals(true, toDoApp.getAllTasks().isEmpty());
 
+    }
+
+    public File getResourse(String name) {
+        return new File(getClass().getClassLoader().getResource(name).getFile());
     }
 
     public void addTasks() {
