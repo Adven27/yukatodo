@@ -73,5 +73,27 @@ public class ToDo {
         }
         return tasks;
     }
+
+    public List<Task> showCompletedTask() {
+        List<Task> test = new ArrayList<>();
+        for (Task t : tasks) {
+            if (t.getState() == true)
+                test.add(t);
+        }
+        return test;
+    }
+
+    public List<Task> showIncompleteTasks() {
+        List<Task> test = new ArrayList<>();
+        for (Task t : tasks) {
+            if (!t.getState() == true)
+                test.add(t);
+        }
+        return test;
+    }
+
+    public void deleteAllTasks() {
+        tasks.clear();
+    }
 }
 

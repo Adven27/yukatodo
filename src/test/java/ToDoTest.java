@@ -4,6 +4,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -106,4 +107,45 @@ public class ToDoTest {
     }
 
 
+    @Test
+    public void canFindCompletedTasks() {
+        toDoApp.add("task");
+        toDoApp.add("task2");
+        toDoApp.add("task3");
+        Task a = toDoApp.getTaskByName("task");
+        a.setState(true);
+        Task b = toDoApp.getTaskByName("task2");
+        b.setState(true);
+        List<Task> test = new ArrayList<>();
+        test.add(a);
+        test.add(b);
+        List<Task> result = toDoApp.showCompletedTask();
+        assertEquals(true, test.equals(result) && result.containsAll(test));
+    }
+
+    @Test
+    public void canFindIncompleteTasks() {
+        toDoApp.add("task");
+        toDoApp.add("task2");
+        toDoApp.add("task3");
+        Task a = toDoApp.getTaskByName("task");
+        a.setState(true);
+        List<Task> test = new ArrayList<>();
+        test.add(toDoApp.getTaskByName("task2"));
+        test.add(toDoApp.getTaskByName("task3"));
+        List<Task> result = toDoApp.showIncompleteTasks();
+        assertEquals(true, test.equals(result) && result.containsAll(test));
+
+    }
+
+    @Test
+    public void canDeleteAllTasks() {
+        toDoApp.add("task");
+        toDoApp.add("task2");
+        toDoApp.add("task3");
+        toDoApp.deleteAllTasks();
+        assertEquals(true, toDoApp.getAllTasks().isEmpty() == true);
+
+    }
 }
+
