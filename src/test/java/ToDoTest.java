@@ -16,7 +16,6 @@ public class ToDoTest {
     BufferedReader br = null;
     ToDo toDoApp = new ToDo();
     List<Task> tasks;
-    Task task;
 
     public ToDoTest() throws IOException {
     }
@@ -33,12 +32,13 @@ public class ToDoTest {
 
     @Test
     public void canAddSeveralTasks() {
-        toDoApp.add("Task1");
-        toDoApp.add("Task2");
+       addTasks();
         tasks = toDoApp.getAllTasks();
-        assertEquals(2, tasks.size());
-        assertEquals("Task1", tasks.get(0).getDescription());
-        assertEquals("Task2", tasks.get(1).getDescription());
+        assertEquals(3, tasks.size());
+        assertEquals("task", tasks.get(0).getDescription());
+        assertEquals("task2", tasks.get(1).getDescription());
+        assertEquals("task3", tasks.get(2).getDescription());
+
     }
 
     @Test
@@ -58,17 +58,15 @@ public class ToDoTest {
 
     @Test
     public void canFindTask() {
-        toDoApp.add("Task1");
-        toDoApp.add("Task2");
-        toDoApp.add("Task3");
-        task = toDoApp.getTaskByName("Task1");
-        assertEquals("Task1", task.getDescription());
+        addTasks();
+        Task task = toDoApp.getTaskByName("task");
+        assertEquals("task", task.getDescription());
     }
 
     @Test
     public void canChangeState() {
         toDoApp.add("Task");
-        task = toDoApp.getTaskByName("Task");
+        Task task = toDoApp.getTaskByName("Task");
         task.setState(true);
         assertEquals(true, task.getState());
     }
@@ -76,7 +74,7 @@ public class ToDoTest {
     @Test
     public void canChangeState2() {
         toDoApp.add("Task");
-        task = toDoApp.getTaskByName("Task");
+        Task task = toDoApp.getTaskByName("Task");
         task.setState(true);
         task = toDoApp.getTaskByName("Task");
         assertEquals(true, task.getState());
@@ -84,9 +82,7 @@ public class ToDoTest {
 
     @Test
     public void canStoreInFile() throws IOException {
-        toDoApp.add("task");
-        toDoApp.add("task2");
-        toDoApp.add("task3");
+        addTasks();
         File file1 = new File(FILENAME);
         File file2 = toDoApp.savetoFile("/Users/admin/Documents/yukatodo/src/main/resources/myfile.csv");
         assertEquals(
@@ -97,9 +93,7 @@ public class ToDoTest {
 
     @Test
     public void getLoadAllTasks() {
-        toDoApp.add("task");
-        toDoApp.add("task2");
-        toDoApp.add("task3");
+        addTasks();
         tasks = toDoApp.getAllTasks();
         File file2 = toDoApp.savetoFile("/Users/admin/Documents/yukatodo/src/main/resources/myfile.csv");
         List<Task> test = toDoApp.readFromFile(file2);
@@ -109,43 +103,43 @@ public class ToDoTest {
 
     @Test
     public void canFindCompletedTasks() {
-        toDoApp.add("task");
-        toDoApp.add("task2");
-        toDoApp.add("task3");
+        addTasks();
         Task a = toDoApp.getTaskByName("task");
         a.setState(true);
         Task b = toDoApp.getTaskByName("task2");
         b.setState(true);
-        List<Task> test = new ArrayList<>();
-        test.add(a);
-        test.add(b);
-        List<Task> result = toDoApp.showCompletedTask();
-        assertEquals(true, test.equals(result) && result.containsAll(test));
+        List<Task> expected = new ArrayList<>();
+        expected.add(a);
+        expected.add(b);
+        List<Task> actual = toDoApp.showCompletedTask();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void canFindIncompleteTasks() {
-        toDoApp.add("task");
-        toDoApp.add("task2");
-        toDoApp.add("task3");
+        addTasks();
         Task a = toDoApp.getTaskByName("task");
         a.setState(true);
-        List<Task> test = new ArrayList<>();
-        test.add(toDoApp.getTaskByName("task2"));
-        test.add(toDoApp.getTaskByName("task3"));
-        List<Task> result = toDoApp.showIncompleteTasks();
-        assertEquals(true, test.equals(result) && result.containsAll(test));
+        List<Task> expected = new ArrayList<>();
+        expected.add(toDoApp.getTaskByName("task2"));
+        expected.add(toDoApp.getTaskByName("task3"));
+        List<Task> actual = toDoApp.showIncompleteTasks();
+        assertEquals(expected, actual);
 
     }
 
     @Test
     public void canDeleteAllTasks() {
+        addTasks();
+        toDoApp.deleteAllTasks();
+        assertEquals(true, toDoApp.getAllTasks().isEmpty());
+
+    }
+
+    public void addTasks() {
         toDoApp.add("task");
         toDoApp.add("task2");
         toDoApp.add("task3");
-        toDoApp.deleteAllTasks();
-        assertEquals(true, toDoApp.getAllTasks().isEmpty() == true);
-
     }
 }
 

@@ -64,8 +64,8 @@ public class ToDo {
     public List<Task> readFromFile(File file2) {
         List<Task> tasks = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file2))) {
-            while(reader.ready()){
-                String [] str = reader.readLine().split(", ");
+            while (reader.ready()) {
+                String[] str = reader.readLine().split(", ");
                 tasks.add(new Task(str[0], Boolean.parseBoolean(str[1])));
             }
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class ToDo {
     public List<Task> showCompletedTask() {
         List<Task> test = new ArrayList<>();
         for (Task t : tasks) {
-            if (t.getState() == true)
+            if (t.getState())
                 test.add(t);
         }
         return test;
@@ -86,7 +86,7 @@ public class ToDo {
     public List<Task> showIncompleteTasks() {
         List<Task> test = new ArrayList<>();
         for (Task t : tasks) {
-            if (!t.getState() == true)
+            if (!t.getState())
                 test.add(t);
         }
         return test;
@@ -94,6 +94,7 @@ public class ToDo {
 
     public void deleteAllTasks() {
         tasks.clear();
+
     }
 }
 

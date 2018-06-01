@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Task implements Serializable{
+public class Task implements Serializable {
 
 
     private String description;
@@ -51,7 +51,7 @@ public class Task implements Serializable{
 
     @Override
     public String toString() {
-        return  description +
-                ", " + state;
+        return description + " " +
+                (state ? "[X]" : "[ ]");
     }
 }
