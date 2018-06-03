@@ -1,12 +1,32 @@
-import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Objects;
 
-public class Task implements Serializable {
+
+@Entity
+@Table(name = "Task")
+public class Task {
 
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "incrementor")
+    private int id;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "state")
     private boolean state;
 
+
+    public int getId() {
+        return id;
+    }
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Task(String description) {
         this.description = description;

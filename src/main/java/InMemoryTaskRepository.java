@@ -1,10 +1,12 @@
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryTaskRepository implements TaskRepository {
+
+    EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
     List<Task> tasks = new ArrayList<Task>();
-    private static final String COMMA_DELIMITER = ", ";
-    private static final String NEW_LINE_SEPARATOR = "\n";
 
 
     @Override
