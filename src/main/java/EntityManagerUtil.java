@@ -2,13 +2,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+
 public class EntityManagerUtil {
 
     private static final EntityManagerFactory entityManagerFactory;
 
     static {
         try {
-            entityManagerFactory = Persistence.createEntityManagerFactory("yukatodo");
+            entityManagerFactory = Persistence.createEntityManagerFactory("test");
 
         } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
@@ -20,3 +21,4 @@ public class EntityManagerUtil {
         return entityManagerFactory.createEntityManager();
     }
 }
+

@@ -6,10 +6,10 @@ import java.util.Objects;
 @Table(name = "Task")
 public class Task {
 
-
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "incrementor")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(name = "description")
@@ -18,14 +18,7 @@ public class Task {
     @Column(name = "state")
     private boolean state;
 
-
-    public int getId() {
-        return id;
-    }
-
-
-    public void setId(int id) {
-        this.id = id;
+    public Task() {
     }
 
     public Task(String description) {
@@ -36,6 +29,14 @@ public class Task {
     public Task(String description, boolean state) {
         this.description = description;
         this.state = state;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescription() {

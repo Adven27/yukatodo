@@ -4,7 +4,6 @@ import java.util.List;
 
 public class InMemoryTaskRepository implements TaskRepository {
 
-    EntityManager entityManager = EntityManagerUtil.getEntityManager();
 
     List<Task> tasks = new ArrayList<Task>();
 
