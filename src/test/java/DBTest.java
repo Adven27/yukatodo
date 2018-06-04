@@ -94,15 +94,6 @@ public class DBTest {
         assertFalse("desc2" == actualTable.getValue(1, "DESCRIPTION"));
     }
 
-    @Test
-    public void canDeleteAllTasks() throws Exception {
-        dbTaskRepository.add(new Task("desc"));
-        dbTaskRepository.add(new Task("desc1"));
-        dbTaskRepository.add(new Task("desc2"));
-        dbTaskRepository.deleteAll();
-        ITable actualTable = find("TASK");
-        assertEquals(0, actualTable.getRowCount());
-    }
 
     private ITable find(String tableName, String where) throws Exception {
         IDatabaseConnection conn = databaseTester.getConnection();
