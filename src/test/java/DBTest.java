@@ -11,6 +11,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class DBTest {
@@ -37,8 +39,8 @@ public class DBTest {
     @Test
     public void canReadTasks() throws Exception {
 
-        builder.newRow("TASK").with("ID", 1).with("DESCRIPTION", "task").with("STATE", "false").add()
-                .newRow("TASK").with("ID", 2).with("DESCRIPTION", "task2").with("STATE", "false").add();
+        builder.newRow("TASK").with("ID", 1).with("DESCRIPTION", "task").with("STATE", false).add()
+                .newRow("TASK").with("ID", 2).with("DESCRIPTION", "task2").with("STATE", false).add();
         IDataSet dataSet = builder.build();
         databaseTester.setDataSet(dataSet);
         databaseTester.onSetup();
@@ -57,8 +59,50 @@ public class DBTest {
         assertEquals(false, actualTable.getValue(0, "STATE"));
     }
 
+    @Test
+    public void canFindTask() throws Exception {
 
+        builder.newRow("TASK").with("ID", 1).with("DESCRIPTION", "task").with("STATE", false).add()
+                .newRow("TASK").with("ID", 2).with("DESCRIPTION", "task2").with("STATE", false).add()
+                .newRow("TASK").with("ID", 3).with("DESCRIPTION", "task3").with("STATE", false).add();
+        IDataSet dataSet = builder.build();
+        databaseTester.setDataSet(dataSet);
+        databaseTester.onSetup();
 
+        Task task = dbTaskRepository.find("task2");
+        assertEquals(task.getDescription(), dataSet.getTable("TASK").getValue(1, "DESCRIPTION"));
+        assertEquals(task.getState(), dataSet.getTable("TASK").getValue(1, "STATE"));
+
+    }
+
+    @Test
+    public void canUpdateTask() throws Exception {
+        dbTaskRepository.add(new Task("desc"));
+        dbTaskRepository.update(1, "desc1", true);
+        ITable actualTable = find("TASK");
+        assertEquals("desc1", actualTable.getValue(0, "DESCRIPTION"));
+        assertEquals(true, actualTable.getValue(0, "STATE"));
+    }
+
+    @Test
+    public void canDeleteTask() throws Exception {
+        dbTaskRepository.add(new Task("desc"));
+        dbTaskRepository.add(new Task("desc1"));
+        dbTaskRepository.add(new Task("desc2"));
+        dbTaskRepository.delete("desc");
+        ITable actualTable = find("TASK");
+        assertFalse("desc2" == actualTable.getValue(1, "DESCRIPTION"));
+    }
+
+    @Test
+    public void canDeleteAllTasks() throws Exception {
+        dbTaskRepository.add(new Task("desc"));
+        dbTaskRepository.add(new Task("desc1"));
+        dbTaskRepository.add(new Task("desc2"));
+        dbTaskRepository.deleteAll();
+        ITable actualTable = find("TASK");
+        assertEquals(0, actualTable.getRowCount());
+    }
 
     private ITable find(String tableName, String where) throws Exception {
         IDatabaseConnection conn = databaseTester.getConnection();
@@ -72,5 +116,3 @@ public class DBTest {
         return find(tableName, "");
     }
 }
-
-
