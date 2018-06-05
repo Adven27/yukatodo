@@ -1,10 +1,11 @@
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 
 @Entity
 @Table(name = "Task")
-public class Task {
+public class Task implements Serializable{
 
     @Id
     @Column(name = "id")

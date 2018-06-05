@@ -4,6 +4,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -85,12 +86,16 @@ public class ToDoTest {
     }
 
     @Test
-    public void getLoadAllTasks() {
-        addTasks();
-        tasks = toDoApp.getAllTasks();
-        File file2 = toDoApp.savetoFile("save.csv");
-        List<Task> test = toDoApp.readFromFile(file2);
-        assertEquals(test, tasks);
+    public void canLoadTasksFromFile() {
+        List<Task> test = toDoApp.readFromFile(getResourse(FILENAME));
+        assertEquals(
+                test,
+                Arrays.asList(
+                        new Task("task"),
+                        new Task("task2"),
+                        new Task("task3")
+                )
+        );
     }
 
 

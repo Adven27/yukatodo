@@ -1,4 +1,5 @@
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,24 +20,22 @@ public class DBTaskRepository implements TaskRepository {
 
     @Override
     public Task find(String name) {
-        List<Task> tasks;
+        Task task = null;
         try {
             entityManager.getTransaction().begin();
-            tasks = entityManager.createQuery("from Task").getResultList();
-            for (Task t : tasks) {
-                if (t.getDescription().equals(name))
-                    return t;
-            }
+            Query query = entityManager.createQuery("from Task where description = :param", Task.class);
+            query.setParameter("param", name);
+            task = (Task) query.getSingleResult();
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
         }
-        return null;
+        return task;
     }
 
     @Override
     public List<Task> findAll() {
-        List<Task> tasks = new ArrayList<>();
+        List tasks = new ArrayList<>();
         try {
             entityManager.getTransaction().begin();
             tasks = entityManager.createQuery("from Task").getResultList();
@@ -49,45 +48,26 @@ public class DBTaskRepository implements TaskRepository {
 
     @Override
     public void update(Task task) {
-
+        add(task);
     }
 
     @Override
     public void delete(Task task) {
-
-    }
-
-    public void delete(String description) {
         try {
             entityManager.getTransaction().begin();
-            Task task = (Task) entityManager.find(Task.class, description);
-            entityManager.remove(task);
+            //select / delete
+            entityManager.remove(entityManager.find(Task.class, task.getId()));
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
         }
     }
-
-    public void update(int id, String name, boolean state) {
-
-        try {
-            entityManager.getTransaction().begin();
-            Task task = entityManager.find(Task.class, id);
-            task.setDescription(name);
-            task.setState(state);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-        }
-
-    }
-
 
     @Override
     public void deleteAll() {
         try {
             entityManager.getTransaction().begin();
-            entityManager.clear();
+            entityManager.createNativeQuery("TRUNCATE TABLE TASK").executeUpdate();
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();

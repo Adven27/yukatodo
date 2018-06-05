@@ -1,7 +1,13 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 public class ToDo {
 
@@ -28,6 +34,12 @@ public class ToDo {
 
     }
 
+    /**
+     * Добавляем задачи в csv - файл
+     *
+     * @param fileName file name
+     * @return file
+     */
     public File savetoFile(String fileName) {
 
         file = new File(fileName);
@@ -47,30 +59,35 @@ public class ToDo {
 
     }
 
-
-    public List<Task> readFromFile(File file2) {
-        List<Task> tasks = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file2))) {
-            while (reader.ready()) {
-                String[] str = reader.readLine().split(", ");
-                tasks.add(new Task(str[0], Boolean.parseBoolean(str[1])));
-            }
+    /**
+     * Загружает список задач из файла
+     *
+     * @param fileName file name
+     * @return tasks лист задач
+     */
+    public List<Task> readFromFile(File fileName) {
+        try {
+            return Files.readAllLines(fileName.toPath()).stream().map(this::taskFromLine).collect(toList());
         } catch (Exception e) {
-            System.out.println("MEOW");
+            return emptyList();
         }
-        return tasks;
+    }
+
+    private Task taskFromLine(String line) {
+        String[] vals = line.split(",");
+        return new Task(vals[0], Boolean.parseBoolean(vals[1]));
     }
 
     public List<Task> showCompletedTask() {
         return taskRepository.findAll().stream()
                 .filter(Task::getState)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<Task> showIncompleteTasks() {
         return taskRepository.findAll().stream()
                 .filter(task -> !task.getState())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public void deleteAllTasks() {
