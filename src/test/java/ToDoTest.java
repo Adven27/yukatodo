@@ -9,11 +9,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-
 public class ToDoTest {
-
     private static final String FILENAME = "test.csv";
-    ToDo toDoApp = new ToDo();
+    ToDo toDoApp = new ToDo(new DBTaskRepository(), new FileImporter());
     List<Task> tasks;
 
 
@@ -23,7 +21,6 @@ public class ToDoTest {
         tasks = toDoApp.getAllTasks();
         assertEquals(1, tasks.size());
         assertEquals("New task", tasks.get(0).getDescription());
-
     }
 
     @Test
@@ -34,7 +31,6 @@ public class ToDoTest {
         assertEquals("task", tasks.get(0).getDescription());
         assertEquals("task2", tasks.get(1).getDescription());
         assertEquals("task3", tasks.get(2).getDescription());
-
     }
 
     @Test
@@ -80,14 +76,14 @@ public class ToDoTest {
     public void canStoreInFile() throws IOException {
         addTasks();
         assertEquals(
-                FileUtils.readLines(toDoApp.savetoFile("save.csv"), "UTF-8"),
+                FileUtils.readLines((File) toDoApp.exportTasks(), "UTF-8"),
                 FileUtils.readLines(getResourse(FILENAME), "UTF-8")
         );
     }
 
     @Test
     public void canLoadTasksFromFile() {
-        List<Task> test = toDoApp.readFromFile(getResourse(FILENAME));
+        List<Task> test = toDoApp.importTasks();
         assertEquals(
                 test,
                 Arrays.asList(

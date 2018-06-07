@@ -1,21 +1,16 @@
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class ToDo {
 
+    final TaskRepository taskRepository;
+    final Importer importer;
 
-    private static final String COMMA_DELIMITER = ", ";
-    private static final String NEW_LINE_SEPARATOR = "\n";
-    File file;
-    TaskRepository taskRepository = new InMemoryTaskRepository();
+    public ToDo(TaskRepository taskRepository, Importer importer) {
+        this.taskRepository = taskRepository;
+        this.importer = importer;
+    }
 
     public void add(String s) {
         taskRepository.add(new Task(s));
@@ -34,49 +29,18 @@ public class ToDo {
 
     }
 
-    /**
-     * Добавляем задачи в csv - файл
-     *
-     * @param fileName file name
-     * @return file
-     */
-    public File savetoFile(String fileName) {
 
-        file = new File(fileName);
-        try (FileWriter fr = new FileWriter(file)) {
-
-            for (Task t : taskRepository.findAll()) {
-                fr.append(t.getDescription());
-                fr.append(COMMA_DELIMITER);
-                fr.append(String.valueOf(t.getState()));
-                fr.append(NEW_LINE_SEPARATOR);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        return file;
+    public Object exportTasks() {
+       return importer.save(taskRepository.findAll());
 
     }
 
-    /**
-     * Загружает список задач из файла
-     *
-     * @param fileName file name
-     * @return tasks лист задач
-     */
-    public List<Task> readFromFile(File fileName) {
-        try {
-            return Files.readAllLines(fileName.toPath()).stream().map(this::taskFromLine).collect(toList());
-        } catch (Exception e) {
-            return emptyList();
-        }
+
+    public List<Task> importTasks() {
+        return importer.load();
+
     }
 
-    private Task taskFromLine(String line) {
-        String[] vals = line.split(",");
-        return new Task(vals[0], Boolean.parseBoolean(vals[1]));
-    }
 
     public List<Task> showCompletedTask() {
         return taskRepository.findAll().stream()
@@ -94,4 +58,3 @@ public class ToDo {
         taskRepository.deleteAll();
     }
 }
-

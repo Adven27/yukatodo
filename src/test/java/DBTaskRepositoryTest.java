@@ -22,6 +22,7 @@ public class DBTaskRepositoryTest {
 
     private static JdbcDatabaseTester getDbTester() {
         try {
+//            return new JdbcDatabaseTester("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/yukatodo", "root", "");
             return new JdbcDatabaseTester("org.h2.Driver", "jdbc:h2:mem:test", "root", "");
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e);

@@ -9,8 +9,7 @@ public class EntityManagerUtil {
 
     static {
         try {
-            entityManagerFactory = Persistence.createEntityManagerFactory("test");
-
+            entityManagerFactory = Persistence.createEntityManagerFactory("yukatodo");
         } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
