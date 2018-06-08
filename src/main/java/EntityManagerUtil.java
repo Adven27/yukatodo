@@ -5,19 +5,14 @@ import javax.persistence.Persistence;
 
 public class EntityManagerUtil {
 
-    private static final EntityManagerFactory entityManagerFactory;
-
-    static {
-        try {
-            entityManagerFactory = Persistence.createEntityManagerFactory("yukatodo");
-        } catch (Throwable ex) {
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
+    private static EntityManagerFactory emf = null;
 
     public static EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
+        if (emf == null){
+            emf = Persistence.createEntityManagerFactory("yukatodo");
+        }
+        return emf.createEntityManager();
     }
+
 }
 

@@ -1,3 +1,5 @@
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -5,18 +7,19 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Task")
-public class Task implements Serializable{
+public class Task implements Serializable {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(generator = "incrementor")
+    @Column(name = "task_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "state")
+    //    @Column(name = "state")
+    @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean state;
 
     public Task() {
