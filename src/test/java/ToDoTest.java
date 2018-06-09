@@ -158,6 +158,7 @@ public class ToDoTest {
 
     @Test
     public void canDeleteAllTasks() {
+        when(taskRepository.findAll()).thenReturn(Collections.emptyList());
         addTasks();
         toDoApp.deleteAllTasks();
         assertEquals(true, toDoApp.getAllTasks().isEmpty());
