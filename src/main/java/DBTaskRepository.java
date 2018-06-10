@@ -18,27 +18,6 @@ public class DBTaskRepository implements TaskRepository {
 
     }
 
-/*
-    @Override
-    public void add(Task task) {
-        Transaction trns = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            trns = session.beginTransaction();
-            session.merge(task);
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            if (trns != null) {
-                trns.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.flush();
-            session.close();
-        }
-
-    }*/
-
     @Override
     public Task find(String name) {
         Task task = null;

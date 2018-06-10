@@ -19,7 +19,11 @@ public class ToDo {
     }
 
     public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+        try {
+            return taskRepository.findAll();
+        } catch (IllegalStateException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     public void delete(String s) {

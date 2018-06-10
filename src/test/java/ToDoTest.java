@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 public class ToDoTest {
@@ -41,17 +43,28 @@ public class ToDoTest {
         assertEquals("task", tasks.get(0).getDescription());
         assertEquals("task2", tasks.get(1).getDescription());
         assertEquals("task3", tasks.get(2).getDescription());
-        verify(taskRepository).findAll();
+        verify(taskRepository, times(1)).findAll();
     }
+
+    /*@Test
+    public void shouldReturnEmptyListWhenFindFailed() {
+        when(taskRepository.findAll()).thenThrow(IllegalStateException.class);
+        tasks = toDoApp.getAllTasks();
+        verify(taskRepository).findAll();
+       // verifyNoMoreInteractions(taskRepository);
+    }*/
 
     @Test
     public void canRemoveTask() {
-        when(taskRepository.findAll()).thenReturn(Collections.emptyList());
+        when(taskRepository.findAll()).thenReturn(Collections.singletonList(new Task("Task2")));
         toDoApp.add("Task1");
+        toDoApp.add("Task2");
         toDoApp.delete("Task1");
         tasks = toDoApp.getAllTasks();
-        assertEquals(0, tasks.size());
+        assertEquals(1, tasks.size());
+        assertFalse(tasks.get(0).getDescription().equals("Task1"));
         verify(taskRepository).findAll();
+        verify(taskRepository, times(1)).delete(anyObject());
     }
 
     @Test
@@ -161,8 +174,8 @@ public class ToDoTest {
         when(taskRepository.findAll()).thenReturn(Collections.emptyList());
         addTasks();
         toDoApp.deleteAllTasks();
-        assertEquals(true, toDoApp.getAllTasks().isEmpty());
-
+        assertTrue(0 == toDoApp.getAllTasks().size());
+        verify(taskRepository, times(1)).deleteAll();
     }
 
     public File getResourse(String name) {

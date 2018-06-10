@@ -60,8 +60,12 @@ public class DBTaskRepositoryTest {
 
     @Test
     public void canAddTask() throws Exception {
+        //CLEANING TABLE
         insert(builder.newRow("TASK").add().build());
+        //ADD TASK
         dbTaskRepository.add(new Task("desc"));
+
+        //SEARCH
         ITable actualTable = selectFrom("TASK");
         assertEquals(1, actualTable.getRowCount());
         assertEquals("desc", actualTable.getValue(0, "DESCRIPTION"));
