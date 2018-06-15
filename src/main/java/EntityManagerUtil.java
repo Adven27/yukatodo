@@ -9,7 +9,7 @@ public class EntityManagerUtil {
 
     public static EntityManager getEntityManager() {
         if (emf == null){
-            emf = Persistence.createEntityManagerFactory("yukatodo");
+            emf = Persistence.createEntityManagerFactory("postgres");
         }
         return emf.createEntityManager();
     }

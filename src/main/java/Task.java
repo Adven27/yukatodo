@@ -6,7 +6,7 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "Task")
+@Table(name = "task")
 public class Task implements Serializable {
 
     @Id
@@ -18,8 +18,8 @@ public class Task implements Serializable {
     @Column(name = "description")
     private String description;
 
-    //    @Column(name = "state")
-    @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
+    @Column(name = "state")
+    //@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean state;
 
     public Task() {

@@ -25,12 +25,14 @@ public class DBTaskRepositoryTest {
 
     private static JdbcDatabaseTester getDbTester() {
         try {
+            return new JdbcDatabaseTester("org.postgresql.Driver", "jdbc:postgresql://localhost/postgres", "postgres", "");
+            /*
             return new MySQLJdbcDatabaseTester(
                     "com.mysql.jdbc.Driver",
                     "jdbc:mysql://localhost:3306/yukatodo?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&inyInt1isBit=false",
                     "root",
                     "",
-                    "yukatodo");
+                    "yukatodo");*/
 //            return new JdbcDatabaseTester("org.h2.Driver", "jdbc:h2:mem:test", "root", "");
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e);
@@ -47,14 +49,14 @@ public class DBTaskRepositoryTest {
 
     @Test
     public void canFindAll() throws Exception {
-        builder.newRow("TASK").with("task_id", 1).with("DESCRIPTION", "task").with("STATE", 0).add()
-                .newRow("TASK").with("task_id", 2).with("DESCRIPTION", "task2").with("STATE", 0).add();
+        builder.newRow("task").with("task_id", 1).with("DESCRIPTION", "task").with("STATE", false).add()
+                .newRow("task").with("task_id", 2).with("DESCRIPTION", "task2").with("STATE", false).add();
         IDataSet dataSet = builder.build();
         insert(dataSet);
 
         List<Task> tasks = dbTaskRepository.findAll();
         assertEquals(2, tasks.size());
-        assertEquals(dataSet.getTable("TASK").getValue(0, "DESCRIPTION"), tasks.get(0).getDescription());
+        assertEquals(dataSet.getTable("task").getValue(0, "DESCRIPTION"), tasks.get(0).getDescription());
     }
 
 
@@ -69,20 +71,20 @@ public class DBTaskRepositoryTest {
         ITable actualTable = selectFrom("TASK");
         assertEquals(1, actualTable.getRowCount());
         assertEquals("desc", actualTable.getValue(0, "DESCRIPTION"));
-        assertEquals(0, actualTable.getValue(0, "STATE"));
+        assertEquals(false, actualTable.getValue(0, "STATE"));
     }
 
     @Test
     public void canFindTask() throws Exception {
-        builder.newRow("TASK").with("task_id", 1).with("DESCRIPTION", "task").with("STATE", 0).add()
-                .newRow("TASK").with("task_id", 2).with("DESCRIPTION", "task2").with("STATE", 0).add()
-                .newRow("TASK").with("task_id", 3).with("DESCRIPTION", "task3").with("STATE", 0).add();
+        builder.newRow("TASK").with("task_id", 1).with("DESCRIPTION", "task").with("STATE", false).add()
+                .newRow("TASK").with("task_id", 2).with("DESCRIPTION", "task2").with("STATE", false).add()
+                .newRow("TASK").with("task_id", 3).with("DESCRIPTION", "task3").with("STATE", false).add();
         IDataSet dataSet = builder.build();
         insert(dataSet);
 
         Task task = dbTaskRepository.find("task2");
         assertEquals(task.getDescription(), dataSet.getTable("TASK").getValue(1, "DESCRIPTION"));
-        assertEquals(task.getState() ? 1 : 0, dataSet.getTable("TASK").getValue(1, "STATE"));
+        assertEquals(task.getState(), dataSet.getTable("TASK").getValue(1, "STATE"));
 
     }
 
@@ -107,7 +109,7 @@ public class DBTaskRepositoryTest {
         builder.newRow("TASK")
                 .with("task_id", expected.getId())
                 .with("DESCRIPTION", expected.getDescription())
-                .with("STATE", expected.getState() ? 1 : 0).add();
+                .with("STATE", expected.getState()).add();
         IDataSet dataSet = builder.build();
         insert(dataSet);
 
@@ -117,7 +119,7 @@ public class DBTaskRepositoryTest {
 
         ITable actualTable = selectFrom("TASK");
         assertEquals("new", actualTable.getValue(0, "DESCRIPTION"));
-        assertEquals(1, actualTable.getValue(0, "STATE"));
+        assertEquals(true, actualTable.getValue(0, "STATE"));
     }
 
     @Test
@@ -138,9 +140,9 @@ public class DBTaskRepositoryTest {
 
     @Test
     public void canDeleteAllTasks() throws Exception {
-        builder.newRow("TASK").with("task_id", 1).with("DESCRIPTION", "task").with("STATE", 0).add()
-                .newRow("TASK").with("task_id", 2).with("DESCRIPTION", "task2").with("STATE", 0).add()
-                .newRow("TASK").with("task_id", 3).with("DESCRIPTION", "task3").with("STATE", 0).add();
+        builder.newRow("TASK").with("task_id", 1).with("DESCRIPTION", "task").with("STATE", false).add()
+                .newRow("TASK").with("task_id", 2).with("DESCRIPTION", "task2").with("STATE", false).add()
+                .newRow("TASK").with("task_id", 3).with("DESCRIPTION", "task3").with("STATE", false).add();
         IDataSet dataSet = builder.build();
         insert(dataSet);
 
@@ -168,7 +170,7 @@ public class DBTaskRepositoryTest {
         databaseTester.onSetup();
     }
 
-    static class MySQLJdbcDatabaseTester extends org.dbunit.JdbcDatabaseTester {
+    /*static class MySQLJdbcDatabaseTester extends org.dbunit.JdbcDatabaseTester {
         public MySQLJdbcDatabaseTester(String driverClass, String connectionUrl, String username, String password,
                                        String schema) throws ClassNotFoundException {
             super(driverClass, connectionUrl, username, password, schema);
@@ -181,6 +183,7 @@ public class DBTaskRepositoryTest {
             dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
             dbConfig.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
             return connection;
-        }
+            }
+        }*/
     }
-}
+
