@@ -1,15 +1,13 @@
+import com.todo.DBTaskRepository;
+import com.todo.Task;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
-import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.builder.DataSetBuilder;
-import org.dbunit.ext.mysql.MySqlDataTypeFactory;
-import org.dbunit.ext.mysql.MySqlMetadataHandler;
 import org.dbunit.operation.DatabaseOperation;
-import org.dbunit.util.QualifiedTableName;
 import org.junit.Test;
 
 import java.util.List;
@@ -185,5 +183,5 @@ public class DBTaskRepositoryTest {
             return connection;
             }
         }*/
-    }
+}
 

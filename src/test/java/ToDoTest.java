@@ -1,3 +1,4 @@
+import com.todo.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
@@ -87,11 +88,11 @@ public class ToDoTest {
 
     @Test
     public void canChangeState() {
-        when(taskRepository.find("Task")).thenReturn(new Task("Task"));
-        toDoApp.add("Task");
-        Task task = toDoApp.getTaskByName("Task");
+        when(taskRepository.find("com.todo.Task")).thenReturn(new Task("com.todo.Task"));
+        toDoApp.add("com.todo.Task");
+        Task task = toDoApp.getTaskByName("com.todo.Task");
         task.setState(true);
-        task = toDoApp.getTaskByName("Task");
+        task = toDoApp.getTaskByName("com.todo.Task");
         assertEquals(true, task.getState());
     }
 

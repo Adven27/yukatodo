@@ -1,3 +1,8 @@
+package com.todo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -5,10 +10,12 @@ import java.util.List;
 
 public class DBTaskRepository implements TaskRepository {
     private final EntityManager entityManager = EntityManagerUtil.getEntityManager();
+    private static final Logger LOG = LoggerFactory.getLogger(DBTaskRepository.class);
 
     @Override
     public void add(Task task) {
         try {
+            LOG.info("INSERTING " + task);
             entityManager.getTransaction().begin();
             entityManager.merge(task);
             entityManager.getTransaction().commit();

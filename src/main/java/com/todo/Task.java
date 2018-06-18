@@ -1,4 +1,4 @@
-import org.hibernate.annotations.Type;
+package com.todo;
 
 import javax.persistence.*;
 import java.io.Serializable;
