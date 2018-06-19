@@ -15,7 +15,7 @@ public class DBTaskRepository implements TaskRepository {
     @Override
     public void add(Task task) {
         try {
-            LOG.info("INSERTING " + task);
+            LOG.error("INSERTING " + task);
             entityManager.getTransaction().begin();
             entityManager.merge(task);
             entityManager.getTransaction().commit();

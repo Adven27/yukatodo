@@ -10,11 +10,11 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/postgres" /> <!-- BD Mane -->
             <property name="javax.persistence.jdbc.user" value="postgres" /> <!-- DB User -->
             <property name="javax.persistence.jdbc.password" value="" /> <!-- DB Password -->
-
-            <!--<property name="javax.persistence.sql-load-script-source" value="META-INF/data.sql"/>-->
+            <property name="hibernate.hbm2ddl.import_files_sql_extractor" value="org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor" />
+            <property name="javax.persistence.sql-load-script-source" value="META-INF/data.sql"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect" />
             <property name="hibernate.hbm2ddl.auto" value="create-drop" /> <!-- create / create-drop / update -->
-            <property name="hibernate.show_sql" value="true" /> <!-- Show SQL in console -->
+            <property name="hibernate.show_sql" value="false" /> <!-- Show SQL in console -->
             <property name="hibernate.format_sql" value="true" /> <!-- Show SQL formatted -->
         </properties>
 

@@ -17,7 +17,7 @@
         </connectionSource>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <logger>com.todo</logger>
-            <level>info</level>
+            <level>warn</level>
         </filter>
     </appender>
 
